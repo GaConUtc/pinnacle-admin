@@ -1,7 +1,11 @@
 import { Card, Row, Form, Input, Button } from 'antd';
-import './login.scss'
+import { useState } from 'react';
+import './login.scss';
 
 function Login() {
+    const { email, setEmail } = useState('');
+    const { password, setPassword } = useState('');
+
     return (
         <div className="login">
             <Row align={'middle'} justify={'center'} style={{ height: '100vh' }} className="login_row">
@@ -16,7 +20,8 @@ function Login() {
                         </div>
                     </div>
                     <div className="login_form">
-                        <Form name="LoginForm"
+                        <Form
+                            name="LoginForm"
                             layout="vertical"
                             autoComplete="on"
                             // onFinish={onFinish}
@@ -26,11 +31,11 @@ function Login() {
                                 label="Username"
                                 rules={[{ required: true, message: 'Please enter account information' }]}
                                 className="login_form__item"
-                                style={{ maxWidth: 410 }}
                             >
                                 <Input
-                                    placeholder="Enter your username or email"
-                                    // value={username}
+                                    placeholder="Enter your email"
+                                    autoComplete="false"
+                                    value={email}
                                     // onChange={changeUsername}
                                 />
                             </Form.Item>
@@ -43,8 +48,8 @@ function Login() {
                             >
                                 <Input.Password
                                     placeholder="Enter your password"
-                                    // value={password}
-                                    autoComplete="true"
+                                    autoComplete="false"
+                                    value={password}
                                     // onChange={changePassword}
                                 />
                             </Form.Item>
@@ -84,4 +89,4 @@ function Login() {
     );
 }
 
-export default Login
+export default Login;

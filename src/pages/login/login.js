@@ -1,6 +1,6 @@
 import { Card, Row, Form, Input, Button } from 'antd';
 import { useState } from 'react';
-import './login.scss';
+import './Login.scss';
 
 function Login() {
     const { email, setEmail } = useState('');

@@ -1,5 +1,5 @@
 import React from 'react';
-import User from '../../pages/User/User';
+import UserManagement from '../../pages/User/UserManagement';
 import LicenceProduct from '../../pages/LicenceProduct/LicenceProduct';
 import LicenceType from '../../pages/LicenceType/LicenceType';
 import Company from '../../pages/Company/Company';
@@ -9,7 +9,7 @@ const SiderItems = [
         text: 'User Management',
         linkTo: 'users',
         children: null,
-        element: <User />,
+        element: <UserManagement />,
         selectedDefault: true,
     },
     {

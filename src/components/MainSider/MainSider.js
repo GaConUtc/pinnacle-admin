@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 
@@ -7,7 +7,6 @@ import SiderItems from './SiderItems';
 function MainSider() {
     const location = useLocation();
     const { Sider } = Layout;
-    const [selectedKey, setSelectedKey] = useState('');
 
     const siderItems = SiderItems.map((item) => {
         return {
@@ -16,11 +15,9 @@ function MainSider() {
         };
     });
 
-    useEffect(() => {
-        const path = location?.pathname;
-        const siderItem = SiderItems?.find((s) => path.includes(s.linkTo));
-        setSelectedKey(siderItem ? siderItem.key : SiderItems?.find((s) => s?.selectedDefault === true)?.key);
-    }, [location.pathname]);
+    const path = location?.pathname;
+    const siderItem = SiderItems?.find((s) => path.includes(s.linkTo));
+    const selectedKey = siderItem ? siderItem.key : SiderItems?.find((s) => s?.selectedDefault === true)?.key;
 
     return (
         <Sider width={200} style={{}}>

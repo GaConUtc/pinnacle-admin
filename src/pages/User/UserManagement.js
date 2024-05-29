@@ -3,6 +3,8 @@ import { Tabs } from 'antd';
 import User from './User';
 import Role from './Role';
 import Permission from './Permission';
+
+import './UserManagement.scss';
 function UserManagement() {
     const items = [
         {
@@ -22,7 +24,7 @@ function UserManagement() {
         },
     ];
 
-    return <Tabs defaultActiveKey="User" items={items} />;
+    return <Tabs className="user-management-menu" defaultActiveKey="User" items={items} />;
 }
 
 export default UserManagement;

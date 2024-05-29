@@ -1,0 +1,25 @@
+.ant-layout-header{
+    background-color: #fff;
+}
+.ant-layout-sider{
+    background: #002060 !important;
+    font-family: 'Poppins' !important;
+    padding: 25px 0;
+
+
+    .ant-menu{
+        background: transparent;
+        .ant-menu-item{
+            font-weight: 600;
+        }
+        .ant-menu-item.ant-menu-item-selected{
+            background-color: #ffffff;
+        }
+        .ant-menu-item.ant-menu-item-selected .ant-menu-title-content{
+            color: #000;
+        }
+        .ant-menu-item .ant-menu-title-content{
+            color: #fff;
+        }
+    }
+}

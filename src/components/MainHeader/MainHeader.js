@@ -7,6 +7,7 @@ function MainHeader() {
             style={{
                 display: 'flex',
                 alignItems: 'center',
+                minHeight: 75,
             }}
         >
             <div className="demo-logo" />

@@ -20,13 +20,14 @@ function MainSider() {
     const selectedKey = siderItem ? siderItem.key : SiderItems?.find((s) => s?.selectedDefault === true)?.key;
 
     return (
-        <Sider width={200} style={{}}>
+        <Sider width={250} style={{}}>
             <Menu
                 mode="inline"
                 selectedKeys={selectedKey}
                 style={{
                     height: '100%',
                     borderRight: 0,
+                    padding: '0px 25px',
                 }}
                 items={siderItems}
             />

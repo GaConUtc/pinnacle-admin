@@ -1,5 +1,6 @@
 import React from 'react';
 import { Layout } from 'antd';
+import { Outlet } from 'react-router-dom';
 
 import MainHeader from '../MainHeader/MainHeader';
 import MainSider from '../MainSider/MainSider';
@@ -14,7 +15,9 @@ const MainMenu = () => {
                     style={{
                         padding: 24,
                     }}
-                ></Layout>
+                >
+                    <Outlet />
+                </Layout>
             </Layout>
         </Layout>
     );

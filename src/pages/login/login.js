@@ -1,11 +1,29 @@
 import { Card, Row, Form, Input, Button } from 'antd';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { ACCESS_TOKEN } from '../../constants/common';
+import { login } from '../../services/apis/LoginApi';
 import './Login.scss';
 
 function Login() {
-    const { email, setEmail } = useState('');
-    const { password, setPassword } = useState('');
+    const navigate = useNavigate();
 
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const onChangeEmail = (e) => setEmail(e.target.value);
+    const onChangePassword = (e) => setPassword(e.target.value);
+
+    const onFinish = async () => {
+        try {
+            const response = await login({ email: email, password: password });
+            localStorage.setItem(ACCESS_TOKEN, response?.data?.token);
+            navigate('/');
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
     return (
         <div className="login">
             <Row align={'middle'} justify={'center'} style={{ height: '100vh' }} className="login_row">
@@ -20,12 +38,7 @@ function Login() {
                         </div>
                     </div>
                     <div className="login_form">
-                        <Form
-                            name="LoginForm"
-                            layout="vertical"
-                            autoComplete="on"
-                            // onFinish={onFinish}
-                        >
+                        <Form name="LoginForm" layout="vertical" autoComplete="on" onFinish={onFinish}>
                             <Form.Item
                                 name="Username"
                                 label="Username"
@@ -36,7 +49,7 @@ function Login() {
                                     placeholder="Enter your email"
                                     autoComplete="false"
                                     value={email}
-                                    // onChange={changeUsername}
+                                    onChange={onChangeEmail}
                                 />
                             </Form.Item>
 
@@ -50,7 +63,7 @@ function Login() {
                                     placeholder="Enter your password"
                                     autoComplete="false"
                                     value={password}
-                                    // onChange={changePassword}
+                                    onChange={onChangePassword}
                                 />
                             </Form.Item>
 

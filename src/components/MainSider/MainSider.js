@@ -1,35 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
-import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+
+import SiderItems from './SiderItems';
 
 function MainSider() {
-    const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map((icon, index) => {
-        const key = String(index + 1);
+    const location = useLocation();
+    const { Sider } = Layout;
+    const [selectedKey, setSelectedKey] = useState('');
+
+    const siderItems = SiderItems.map((item) => {
         return {
-            key: `sub${key}`,
-            icon: React.createElement(icon),
-            label: `subnav ${key}`,
-            children: new Array(4).fill(null).map((_, j) => {
-                const subKey = index * 4 + j + 1;
-                return {
-                    key: subKey,
-                    label: `option${subKey}`,
-                };
-            }),
+            key: item.key,
+            label: <Link to={item.linkTo}>{item.text}</Link>,
         };
     });
-    const { Sider } = Layout;
+
+    useEffect(() => {
+        const path = location?.pathname;
+        const siderItem = SiderItems?.find((s) => path.includes(s.linkTo));
+        setSelectedKey(siderItem ? siderItem.key : SiderItems?.find((s) => s?.selectedDefault === true)?.key);
+    }, [location.pathname]);
+
     return (
         <Sider width={200} style={{}}>
             <Menu
                 mode="inline"
-                defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub1']}
+                selectedKeys={selectedKey}
                 style={{
                     height: '100%',
                     borderRight: 0,
                 }}
-                items={items2}
+                items={siderItems}
             />
         </Sider>
     );

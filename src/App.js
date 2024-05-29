@@ -1,47 +1,39 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import User from './pages/User/User';
-import LicenceProduct from './pages/LicenceProduct/LicenceProduct';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { ACCESS_TOKEN } from './constants/common';
+import MainMenu from './components/MainMenu/MainMenu';
+import SiderItems from './components/MainSider/SiderItems';
 import Login from './pages/Login/Login';
 
 function App() {
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = '/login';
-        }
-    }, []);
     return (
         <Router>
-            <Route path="/login" component={Login} />
-            <PrivateRoute path="/main">
-                <Route path="/" component={User} />
-                <Route path="/users" component={User} />
-                <Route path="/products" component={LicenceProduct} />
-            </PrivateRoute>
+            <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route
+                    path="/"
+                    element={
+                        <ProtectedRoute>
+                            <MainMenu />
+                        </ProtectedRoute>
+                    }
+                >
+                    {SiderItems?.map((item) => (
+                        <Route key={item.key} path={item?.linkTo} element={item?.element}></Route>
+                    ))}
+                </Route>
+                <Route path="*" element={<Navigate to="/login" />} />
+            </Routes>
         </Router>
     );
 }
 
-const PrivateRoute = ({ children, ...rest }) => {
-    return (
-        <Route
-            {...rest}
-            render={({ location }) =>
-                localStorage.getItem('token') ? (
-                    children
-                ) : (
-                    <></>
-                    // <Redirect
-                    //     to={{
-                    //         pathname: '/login',
-                    //         state: { from: location },
-                    //     }}
-                    // />
-                )
-            }
-        />
-    );
+const ProtectedRoute = ({ children }) => {
+    const token = localStorage.getItem(ACCESS_TOKEN);
+    if (!token) {
+        return <Navigate to="/login" />;
+    }
+    return children;
 };
 
 export default App;

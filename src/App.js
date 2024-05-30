@@ -18,6 +18,7 @@ function App() {
                         </ProtectedRoute>
                     }
                 >
+                    <Route path="/" element={<Navigate to="/users" />} />
                     {SiderItems?.map((item) => (
                         <Route key={item.key} path={item?.linkTo} element={item?.element}></Route>
                     ))}

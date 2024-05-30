@@ -1,5 +1,6 @@
 import React from 'react';
-import { Row, Col, Button } from 'antd';
+import { Row, Col } from 'antd';
+import { PlusCircleFilled, PlusCircleOutlined, PlusCircleTwoTone, GooglePlusCircleFilled } from '@ant-design/icons';
 
 import InputSearch from '../commons/InputSearch';
 import ButtonFilter from '../commons/ButtonFilter';
@@ -20,10 +21,13 @@ function MainContentHeader({ ...props }) {
             <Col className="content-header">
                 <Row>
                     <div className="content-header_item">
-                        <InputSearch />
+                        <InputSearch value={props.inputValue} searchChange={props.searchChange} />
                     </div>
                     <div className="content-header_item">
                         <ButtonFilter />
+                    </div>
+                    <div className="content-header_item" style={{ display: 'flex' }}>
+                        <PlusCircleOutlined style={{ fontSize: 16, opacity: 0.5, cursor: 'pointer' }} />
                     </div>
                 </Row>
             </Col>

@@ -1,77 +1,132 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Layout, Table } from 'antd';
 
+import useDebounce from '../../components/commons/useDebounce';
+import PaginationCustom from '../../components/commons/PaginationCustom';
 import MainContentHeader from '../../components/MainContentHeader/MainContentHeader';
+import { getUsers } from '../../services/apis/UserApis';
 
 const { Content } = Layout;
 function User() {
+    const [users, setUsers] = useState([]);
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [total, setTotal] = useState(0);
+    const [searchStr, setSearchStr] = useState('');
+
+    const debouncedSearchStr = useDebounce(searchStr, 500);
+    const getUserData = useCallback(
+        async (...props) => {
+            try {
+                const paramInput = { page: page, pageSize: pageSize, search: debouncedSearchStr };
+                const userData = await getUsers(paramInput);
+
+                setUsers(userData?.data?.data?.map((item) => ({ ...item, key: item.id })));
+                setPage(userData?.data?.page);
+                setPageSize(userData?.data?.pageSize);
+                setTotal(userData?.data?.total);
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        [page, pageSize, debouncedSearchStr],
+    );
+    useEffect(() => {
+        getUserData();
+    }, [page, pageSize, debouncedSearchStr, getUserData]);
+
     const columns = [
         {
-            title: 'Name',
-            dataIndex: 'name',
+            title: 'First Name',
+            dataIndex: 'firstName',
+            sorter: true,
         },
         {
-            title: 'Chinese Score',
-            dataIndex: 'chinese',
-            sorter: {
-                compare: (a, b) => a.chinese - b.chinese,
-                multiple: 3,
+            title: 'Last Name',
+            dataIndex: 'lastName',
+            sorter: true,
+        },
+        {
+            title: 'Status',
+            dataIndex: 'statusStr',
+            sorter: true,
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            sorter: true,
+        },
+        {
+            title: 'Contact Number',
+            dataIndex: 'phoneNumber',
+            sorter: true,
+        },
+        {
+            title: 'Role',
+            dataIndex: 'role',
+            sorter: true,
+        },
+        {
+            title: 'Company',
+            dataIndex: 'companyAssigned',
+            sorter: true,
+            render: (items, record, index) => {
+                const text = items?.map((item) => item.name)?.join(',');
+                return text;
             },
         },
         {
-            title: 'Math Score',
-            dataIndex: 'math',
-            sorter: {
-                compare: (a, b) => a.math - b.math,
-                multiple: 2,
-            },
-        },
-        {
-            title: 'English Score',
-            dataIndex: 'english',
-            sorter: {
-                compare: (a, b) => a.english - b.english,
-                multiple: 1,
-            },
+            title: '',
+            dataIndex: '',
         },
     ];
-    const data = [
-        {
-            key: '1',
-            name: 'John Brown',
-            chinese: 98,
-            math: 60,
-            english: 70,
-        },
-        {
-            key: '2',
-            name: 'Jim Green',
-            chinese: 98,
-            math: 66,
-            english: 89,
-        },
-        {
-            key: '3',
-            name: 'Joe Black',
-            chinese: 98,
-            math: 90,
-            english: 70,
-        },
-        {
-            key: '4',
-            name: 'Jim Red',
-            chinese: 88,
-            math: 99,
-            english: 89,
-        },
-    ];
-    const onChange = (pagination, filters, sorter, extra) => {
-        console.log('params', pagination, filters, sorter, extra);
-    };
+
     return (
         <Content>
-            <MainContentHeader titleLeft="Admin User Management" />
-            <Table columns={columns} dataSource={data} onChange={onChange} />
+            <MainContentHeader titleLeft="Admin User Management" inputValue={searchStr} searchChange={setSearchStr} />
+            <div className="content-table" style={{ backgroundColor: '#fff' }}>
+                <Table
+                    style={{
+                        height: '100%',
+                        padding: '0px 15px',
+                        marginTop: 10,
+                    }}
+                    columns={columns}
+                    showSorterTooltip={false}
+                    dataSource={users}
+                    // scroll={{ y: 550 }}
+                    pagination={false}
+                    onChange={getUserData}
+                    // footer={() =>
+                    //     total > 0 && (
+                    //         <PaginationCustom
+                    //             total={total}
+                    //             page={page}
+                    //             pageSize={pageSize}
+                    //             onChange={(page, size) => {
+                    //                 setPage(page);
+                    //                 setPageSize(size);
+                    //             }}
+                    //             onShowSizeChange={(current, pageSize) => setPageSize(pageSize)}
+                    //         />
+                    //     )
+                    // }
+                />
+                <>
+                    {total > 0 && (
+                        <PaginationCustom
+                            total={total}
+                            page={page}
+                            pageSize={pageSize}
+                            onChange={(page, size) => {
+                                setPage(page);
+                                setPageSize(size);
+                            }}
+                            onShowSizeChange={(current, pageSize) => setPageSize(pageSize)}
+                        />
+                    )}
+                </>
+            </div>
         </Content>
     );
 }

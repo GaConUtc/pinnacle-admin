@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col } from 'antd';
-import { PlusCircleFilled, PlusCircleOutlined, PlusCircleTwoTone, GooglePlusCircleFilled } from '@ant-design/icons';
+import { PlusCircleOutlined } from '@ant-design/icons';
 
 import InputSearch from '../commons/InputSearch';
 import ButtonFilter from '../commons/ButtonFilter';

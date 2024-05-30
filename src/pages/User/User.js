@@ -55,6 +55,8 @@ function User() {
             title: 'Email',
             dataIndex: 'email',
             sorter: true,
+            width: '25%',
+            ellipsis: true,
         },
         {
             title: 'Contact Number',
@@ -86,31 +88,13 @@ function User() {
             <MainContentHeader titleLeft="Admin User Management" inputValue={searchStr} searchChange={setSearchStr} />
             <div className="content-table" style={{ backgroundColor: '#fff' }}>
                 <Table
-                    style={{
-                        height: '100%',
-                        padding: '0px 15px',
-                        marginTop: 10,
-                    }}
                     columns={columns}
                     showSorterTooltip={false}
                     dataSource={users}
-                    // scroll={{ y: 550 }}
+                    // scroll={{ y: '100%' }}
                     pagination={false}
                     onChange={getUserData}
-                    // footer={() =>
-                    //     total > 0 && (
-                    //         <PaginationCustom
-                    //             total={total}
-                    //             page={page}
-                    //             pageSize={pageSize}
-                    //             onChange={(page, size) => {
-                    //                 setPage(page);
-                    //                 setPageSize(size);
-                    //             }}
-                    //             onShowSizeChange={(current, pageSize) => setPageSize(pageSize)}
-                    //         />
-                    //     )
-                    // }
+                    loading={false}
                 />
                 <>
                     {total > 0 && (

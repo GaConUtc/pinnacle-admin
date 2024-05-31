@@ -1,9 +1,5 @@
 const ACCESS_TOKEN = 'accessToken';
 const COMMON_STATUS = {
-    DELETED: {
-        key: 0,
-        value: 'Deleted',
-    },
     ACTIVE: {
         key: 1,
         value: 'Active',
@@ -12,5 +8,24 @@ const COMMON_STATUS = {
         key: 2,
         value: 'Inactive',
     },
+    DELETED: {
+        key: 0,
+        value: 'Deleted',
+    },
 };
-export { ACCESS_TOKEN, COMMON_STATUS };
+
+const SORT_TYPE = {
+    NONE: {
+        key: 0,
+        value: 'none' | 'underfine',
+    },
+    ASC: {
+        key: 1,
+        value: 'ascend',
+    },
+    DESC: {
+        key: 1,
+        value: 'descend',
+    },
+};
+export { ACCESS_TOKEN, COMMON_STATUS, SORT_TYPE };

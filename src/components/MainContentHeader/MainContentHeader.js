@@ -6,6 +6,8 @@ import InputSearch from '../commons/InputSearch';
 import ButtonFilter from '../commons/ButtonFilter';
 
 function MainContentHeader({ ...props }) {
+    const openModal = () => props.setIsModalOpen(true);
+
     return (
         <Row style={{ justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid #DFDFDF' }}>
             <Col
@@ -24,10 +26,17 @@ function MainContentHeader({ ...props }) {
                         <InputSearch value={props.inputValue} searchChange={props.searchChange} />
                     </div>
                     <div className="content-header_item">
-                        <ButtonFilter />
+                        <ButtonFilter
+                            checkedKeys={props.checkedKeys}
+                            setCheckedKeys={props.setCheckedKeys}
+                            treeData={props.treeData}
+                        />
                     </div>
                     <div className="content-header_item" style={{ display: 'flex' }}>
-                        <PlusCircleOutlined style={{ fontSize: 16, opacity: 0.5, cursor: 'pointer' }} />
+                        <PlusCircleOutlined
+                            onClick={openModal}
+                            style={{ fontSize: 16, opacity: 0.5, cursor: 'pointer' }}
+                        />
                     </div>
                 </Row>
             </Col>

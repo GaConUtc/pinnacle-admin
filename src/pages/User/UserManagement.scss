@@ -14,14 +14,30 @@
     position: absolute;
     max-height: 90%;
     margin-top: 10px;
-    // .ant-table-thead {
-    //     position: fixed;
-    // }
     overflow-y: scroll;
-    // .ant-table-container > .ant-table-header{
-    //     position: absolute;
-    // }
-    // .ant-table-container .ant-table-body{
-    //    overflow-y: auto;
-    // }
+}
+.ant-popover {
+    .ant-popover-inner {
+        padding: 0;
+    }
+    .ant-popover-title {
+        margin: 0;
+        font-weight: 500;
+        border-bottom: 1px solid #f0f0f0;
+        padding: 10px 15px;
+    }
+    .ant-popover-inner-content {
+        padding: 10px 15px;
+    }
+}
+.tree-no-children .ant-tree-treenode .ant-tree-indent,
+.tree-no-children .ant-tree-treenode .ant-tree-switcher {
+    display: none;
+}
+
+.ant-tree {
+    .ant-tree-checkbox.ant-tree-checkbox-checked .ant-tree-checkbox-inner {
+        background-color: #002060 !important;
+        border-color: #002060 !important;
+    }
 }

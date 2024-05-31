@@ -18,7 +18,8 @@ h7 {
 
 p,
 div,
-span {
+span,
+input {
     font-family: 'Poppins', sans-serif !important;
 }
 
@@ -84,4 +85,38 @@ span {
             height: 100%;
         }
     }
+}
+
+.ant-modal-content {
+    padding: 0 !important;
+    border-radius: 15px;
+    overflow: hidden;
+    .ant-modal-title {
+        color: #002060;
+    }
+}
+.ant-row .ant-form-item {
+    margin-bottom: 15px;
+
+    .ant-form-item-row {
+        margin: 0px 5px;
+    }
+    .ant-form-item-label {
+        padding: 0;
+    }
+}
+.ant-input.form-input {
+    height: 40px;
+}
+.ant-modal-footer .ant-btn {
+    height: 40px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}
+.ant-btn-primary {
+    &:hover {
+        background-color: #002060 !important;
+    }
+    background-color: #002060;
 }

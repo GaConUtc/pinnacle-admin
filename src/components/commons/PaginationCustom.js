@@ -14,7 +14,11 @@ function PaginationCustom({ total, page, pageSize, onChange, onShowSizeChange })
             pageSizeOptions={['10', '20', '50']}
             onChange={onChange}
             onShowSizeChange={onShowSizeChange}
-            showTotal={(page, pageSize) => `Showing data ${1} to ${10} of ${18} entries`}
+            showTotal={() =>
+                `Showing data ${(page - 1) * pageSize + 1} to ${
+                    page * pageSize > total ? total : page * pageSize
+                } of ${total} entries`
+            }
         />
     );
 }

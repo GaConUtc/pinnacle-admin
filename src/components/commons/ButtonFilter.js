@@ -1,26 +1,40 @@
 import React, { useState } from 'react';
 import { FilterOutlined } from '@ant-design/icons';
-import { Button, Popover, Tree } from 'antd';
+import { Button, Popover, Tree, Badge } from 'antd';
 
-import { COMMON_STATUS } from '../../constants/common';
-function ButtonFilter() {
+function ButtonFilter({ checkedKeys, setCheckedKeys, treeData }) {
+    const onCheck = (checkedKeysValue) => {
+        setCheckedKeys(checkedKeysValue);
+    };
+    const countBadge = checkedKeys?.length;
     const [open, setOpen] = useState(false);
     const handleOpenChange = (newOpen) => {
         setOpen(newOpen);
     };
 
-    const treeData = Object.values(COMMON_STATUS)?.map((item) => ({ title: item.value, key: item.key }));
-    const treeComponent = <Tree checkable treeData={treeData} />;
+    const treeComponent = (
+        <Tree
+            defaultCheckedKeys={checkedKeys}
+            onCheck={onCheck}
+            className="tree-no-children"
+            checkable
+            treeData={treeData}
+        />
+    );
     return (
-        <Popover
-            content={treeComponent}
-            trigger={'click'}
-            open={open}
-            placement="bottom"
-            onOpenChange={handleOpenChange}
-        >
-            <Button icon={<FilterOutlined style={{ fontSize: 16, opacity: 0.5 }} />}>Filter</Button>
-        </Popover>
+        <Badge size="default" style={{ background: '#002060' }} count={countBadge}>
+            <Popover
+                className="filter-no-node"
+                content={treeComponent}
+                title="Filter"
+                trigger={'click'}
+                open={open}
+                placement="bottom"
+                onOpenChange={handleOpenChange}
+            >
+                <Button icon={<FilterOutlined style={{ fontSize: 16, opacity: 0.5 }} />}>Filter</Button>
+            </Popover>
+        </Badge>
     );
 }
 

@@ -24,7 +24,9 @@ function UserManagement() {
         },
     ];
 
-    return <Tabs className="user-management-menu" defaultActiveKey="User" items={items} />;
+    return (
+        <Tabs className="user-management-menu" destroyInactiveTabPane={true} defaultActiveKey="User" items={items} />
+    );
 }
 
 export default UserManagement;

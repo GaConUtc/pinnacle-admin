@@ -24,8 +24,19 @@ const SORT_TYPE = {
         value: 'ascend',
     },
     DESC: {
-        key: 1,
+        key: 2,
         value: 'descend',
     },
 };
-export { ACCESS_TOKEN, COMMON_STATUS, SORT_TYPE };
+
+const PERMISSION_STATUS = {
+    NOTAPPLIED: {
+        key: 0,
+        value: 'NotApplied',
+    },
+    APPLIED: {
+        key: 1,
+        value: 'Applied',
+    },
+};
+export { ACCESS_TOKEN, COMMON_STATUS, SORT_TYPE, PERMISSION_STATUS };

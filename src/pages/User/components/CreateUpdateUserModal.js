@@ -1,56 +1,61 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Modal, Form, Row, Col, Select, message, Input } from 'antd';
 
 import { getRoleSelectList } from '../../../services/apis/RoleApis';
 import { createUpdateUser } from '../../../services/apis/UserApis';
 import { COMMON_STATUS } from '../../../constants/common';
 
-function CreateUpdateUserModal({ ...props }) {
+const { Option } = Select;
+const layout = {
+    labelCol: {
+        span: 24,
+    },
+    wrapperCol: {
+        span: 24,
+    },
+};
+
+function CreateUpdateUserModal({ isModalOpen, setIsModalOpen, isReload, setIsReload, editUser, setEditUser }) {
     const [roles, setRoles] = useState([]);
     const [form] = Form.useForm();
-    const { Option } = Select;
-    const layout = {
-        labelCol: {
-            span: 24,
-        },
-        wrapperCol: {
-            span: 24,
-        },
-    };
 
-    const getRoles = async () => {
+    const getRoles = useCallback(async () => {
         try {
             const response = await getRoleSelectList();
             setRoles(response.data);
         } catch (error) {
             message.error(error?.message);
         }
-    };
+    }, []);
 
     const createUser = async (user) => {
         try {
             const response = await createUpdateUser(user);
             message.success(response.message);
-            form.resetFields();
-            props.setIsModalOpen(false);
+            setIsModalOpen(false);
+            setIsReload(!isReload);
+            setEditUser(null);
         } catch (error) {
             message.error(error.message);
         }
     };
     useEffect(() => {
-        getRoles();
-    }, []);
+        if (isModalOpen) {
+            getRoles();
+        }
+    }, [isModalOpen, getRoles]);
 
-    const handleCancel = () => props.setIsModalOpen(false);
+    const handleCancel = () => {
+        setIsModalOpen(false);
+        setEditUser(null);
+    };
     const handleOk = async () => {
         try {
             let formVals = await form.validateFields();
-            formVals = { ...formVals, userName: `${formVals.firstName} ${formVals.lastName}`, id: null };
+            formVals = { ...formVals, userName: `${formVals.firstName} ${formVals.lastName}`, id: editUser?.id };
             // await createUser(formVals);
-            props.setIsReload(!props.isReload);
         } catch (error) {}
     };
-
     return (
         <Modal
             width={750}
@@ -71,25 +76,13 @@ function CreateUpdateUserModal({ ...props }) {
                     padding: '16px 24px',
                 },
             }}
-            title="Add new account"
-            open={props.isModalOpen}
+            title={editUser?.id ? 'Edit account information' : 'Add new account'}
+            open={isModalOpen}
             onCancel={handleCancel}
             onOk={handleOk}
-            okText={'Create'}
+            okText={editUser?.id ? 'Update' : 'Create'}
         >
-            <Form
-                {...layout}
-                form={form}
-                onFinish={handleOk}
-                initialValues={{
-                    firstName: '',
-                    lastName: '',
-                    contactNumber: '',
-                    email: '',
-                    role: null,
-                    status: COMMON_STATUS.ACTIVE.key,
-                }}
-            >
+            <Form {...layout} form={form} onFinish={handleOk} initialValues={editUser}>
                 <Row>
                     <Col span={12}>
                         <Form.Item
@@ -132,7 +125,7 @@ function CreateUpdateUserModal({ ...props }) {
                                 },
                             ]}
                         >
-                            <Input className="form-input" placeholder="Contact Number" />
+                            <Input disabled={editUser?.id} className="form-input" placeholder="Contact Number" />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -146,7 +139,7 @@ function CreateUpdateUserModal({ ...props }) {
                                 },
                             ]}
                         >
-                            <Input className="form-input" placeholder="Email" />
+                            <Input disabled={editUser?.id} className="form-input" placeholder="Email" />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -171,7 +164,9 @@ function CreateUpdateUserModal({ ...props }) {
                             >
                                 <Option value={COMMON_STATUS.ACTIVE.key}>{COMMON_STATUS.ACTIVE.value}</Option>
                                 <Option value={COMMON_STATUS.INACTIVE.key}>{COMMON_STATUS.INACTIVE.value}</Option>
-                                <Option value={COMMON_STATUS.DELETED.key}>{COMMON_STATUS.DELETED.value}</Option>
+                                <Option disabled={editUser?.id} value={COMMON_STATUS.DELETED.key}>
+                                    {COMMON_STATUS.DELETED.value}
+                                </Option>
                             </Select>
                         </Form.Item>
                     </Col>

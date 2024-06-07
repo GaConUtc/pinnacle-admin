@@ -14,8 +14,7 @@ const { Option } = Select;
 
 function ModalCreateUpdateRole({ role, setRole, isOpenModal, setIsOpenModal, isReload, setIsReload }) {
     const [modulePermissions, setModulePermissions] = useState([]);
-    const [moduleLinkedPermissions, setModuleLinkedPermissions] = useState([]);
-    // let moduleLinkedPermissions = [];
+    const [moduleLinkedPermissions, setModuleLinkedPermissions] = useState([{}]);
     const [form] = Form.useForm();
     const onOk = async () => {
         const formValues = await form.validateFields();
@@ -27,13 +26,25 @@ function ModalCreateUpdateRole({ role, setRole, isOpenModal, setIsOpenModal, isR
     };
 
     const handleChangePermission = (e, moduleId) => {
+        // const newData =
+        //     moduleLinkedPermissions?.length > 0
+        //         ? moduleLinkedPermissions?.map((i) =>
+        //               i?.moduleId !== moduleId
+        //                   ? { moduleId: moduleId, linkedPermissions: e }
+        //                   : { ...i, linkedPermissions: e },
+        //           )
+        //         : moduleLinkedPermissions.push({ moduleId: moduleId, linkedPermissions: e });
+        // console.log(newData);
+        // setModuleLinkedPermissions(newData);
+
         setModuleLinkedPermissions((pre) => {
-            console.log(pre);
-            return pre?.map((i) =>
-                i?.moduleId !== moduleId
-                    ? { moduleId: moduleId, linkedPermissions: e }
-                    : { ...i, linkedPermissions: e },
-            );
+            return pre?.length > 0
+                ? pre?.map((i) =>
+                      i?.moduleId !== moduleId
+                          ? { moduleId: moduleId, linkedPermissions: e }
+                          : { ...i, linkedPermissions: e },
+                  )
+                : pre.push({ moduleId: moduleId, linkedPermissions: e });
         });
     };
     useEffect(() => {
@@ -47,7 +58,9 @@ function ModalCreateUpdateRole({ role, setRole, isOpenModal, setIsOpenModal, isR
         };
         getModulePermissionData();
     }, []);
+
     console.log(moduleLinkedPermissions);
+
     return (
         <Modal
             width={750}

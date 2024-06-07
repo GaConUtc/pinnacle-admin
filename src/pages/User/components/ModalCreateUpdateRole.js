@@ -14,14 +14,28 @@ const { Option } = Select;
 
 function ModalCreateUpdateRole({ role, setRole, isOpenModal, setIsOpenModal, isReload, setIsReload }) {
     const [modulePermissions, setModulePermissions] = useState([]);
-
+    const [moduleLinkedPermissions, setModuleLinkedPermissions] = useState([]);
+    // let moduleLinkedPermissions = [];
     const [form] = Form.useForm();
-    const onOk = () => ({});
+    const onOk = async () => {
+        const formValues = await form.validateFields();
+        console.log(formValues);
+    };
     const onCancel = () => {
         setIsOpenModal && setIsOpenModal(false);
         setRole && setRole(null);
     };
 
+    const handleChangePermission = (e, moduleId) => {
+        setModuleLinkedPermissions((pre) => {
+            console.log(pre);
+            return pre?.map((i) =>
+                i?.moduleId !== moduleId
+                    ? { moduleId: moduleId, linkedPermissions: e }
+                    : { ...i, linkedPermissions: e },
+            );
+        });
+    };
     useEffect(() => {
         const getModulePermissionData = async () => {
             try {
@@ -33,7 +47,7 @@ function ModalCreateUpdateRole({ role, setRole, isOpenModal, setIsOpenModal, isR
         };
         getModulePermissionData();
     }, []);
-    console.log(modulePermissions);
+    console.log(moduleLinkedPermissions);
     return (
         <Modal
             width={750}
@@ -58,6 +72,7 @@ function ModalCreateUpdateRole({ role, setRole, isOpenModal, setIsOpenModal, isR
                 },
             }}
             onCancel={onCancel}
+            onOk={onOk}
             open={isOpenModal}
             title={role ? 'Update Role' : 'Add new Role'}
         >
@@ -78,43 +93,42 @@ function ModalCreateUpdateRole({ role, setRole, isOpenModal, setIsOpenModal, isR
                         </Form.Item>
                     </Col>
                     <Col span={24}>
-                        <Form.Item label="Role Description">
+                        <Form.Item name="description" label="Role Description">
                             <Input className="form-input" placeholder="Enter Last Name" />
                         </Form.Item>
                     </Col>
                     <Col span={24}>
                         <Form.Item label="Permission">
-                            <>
-                                {modulePermissions?.map((item) => {
-                                    const items = [
-                                        {
-                                            key: item.moduleId,
-                                            label: item.name,
-                                            children: (
-                                                <Select
-                                                    mode="multiple"
-                                                    style={{
-                                                        height: 40,
-                                                    }}
-                                                    options={item?.displayPermissions?.map((p) => ({
-                                                        label: p.name,
-                                                        value: p.permissionId,
-                                                    }))}
-                                                ></Select>
-                                            ),
-                                        },
-                                    ];
+                            {modulePermissions?.map((item) => {
+                                const items = [
+                                    {
+                                        key: item.moduleId,
+                                        label: item.name,
+                                        children: (
+                                            <Select
+                                                mode="multiple"
+                                                style={{
+                                                    height: 40,
+                                                }}
+                                                options={item?.displayPermissions?.map((p) => ({
+                                                    label: p.name,
+                                                    value: p.permissionId,
+                                                }))}
+                                                onChange={(e) => handleChangePermission(e, item.moduleId)}
+                                            ></Select>
+                                        ),
+                                    },
+                                ];
 
-                                    return (
-                                        <Collapse
-                                            key={item.moduleId}
-                                            style={{ marginBottom: 10 }}
-                                            size="small"
-                                            items={items}
-                                        ></Collapse>
-                                    );
-                                })}
-                            </>
+                                return (
+                                    <Collapse
+                                        key={item.moduleId}
+                                        style={{ marginBottom: 10 }}
+                                        size="small"
+                                        items={items}
+                                    ></Collapse>
+                                );
+                            })}
                         </Form.Item>
                     </Col>
                     <Col></Col>

@@ -42,7 +42,6 @@ function ModalUpdatePermission({ permission, setPermission, isOpenEdit, setIsOpe
     };
     return (
         <Modal
-            width={750}
             styles={{
                 mask: {
                     padding: '0px !importance',
@@ -60,6 +59,7 @@ function ModalUpdatePermission({ permission, setPermission, isOpenEdit, setIsOpe
                     padding: '16px 24px',
                 },
             }}
+            width={750}
             title={'Edit Permission'}
             open={isOpenEdit}
             onCancel={handleCancel}

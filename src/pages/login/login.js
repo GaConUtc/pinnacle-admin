@@ -1,4 +1,4 @@
-import { Card, Row, Form, Input, Button } from 'antd';
+import { Card, Row, Form, Input, Button, message } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,7 +21,7 @@ function Login() {
             localStorage.setItem(ACCESS_TOKEN, response?.data?.token);
             navigate('/');
         } catch (error) {
-            console.log(error.message);
+            message.error(error.message);
         }
     };
     return (

@@ -13,7 +13,11 @@ import ModalConfirm from '../../components/ModalConfirm/ModalConfirm';
 const { Content } = Layout;
 
 const filterStatusData = Object.values(COMMON_STATUS)?.map((item) => ({ title: item.value, key: item.key }));
-
+const showHeader = {
+    search: true,
+    filter: true,
+    addNew: true,
+};
 function User() {
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(1);
@@ -196,6 +200,7 @@ function User() {
                     searchChange={setSearchStr}
                     isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
+                    showHeader={showHeader}
                 />
                 <div className="content-table" style={{ backgroundColor: '#fff' }}>
                     <Table

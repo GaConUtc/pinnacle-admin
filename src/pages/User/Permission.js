@@ -6,7 +6,11 @@ import { getPermissions } from '../../services/apis/UserApis';
 import ModalUpdatePermission from './components/ModalUpdatePermission';
 
 const { Content } = Layout;
-
+const showHeader = {
+    search: false,
+    filter: false,
+    addNew: false,
+};
 function Permission() {
     const [permissions, setPermissions] = useState([]);
     const [isOpenEdit, setIsOpenEdit] = useState(false);
@@ -100,7 +104,7 @@ function Permission() {
     return (
         <>
             <Content>
-                <MainContentHeader titleLeft="Permission" headerRight={false} />
+                <MainContentHeader titleLeft="Permission" showHeader={showHeader} />
                 <div className="content-table" style={{ backgroundColor: '#fff' }}>
                     <Table
                         width={'100%'}

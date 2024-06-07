@@ -7,16 +7,15 @@ import ButtonFilter from '../commons/ButtonFilter';
 
 function MainContentHeader({
     titleLeft,
-    headerRight = true,
     checkedKeys,
     setCheckedKeys,
     treeData,
     inputValue,
     searchChange,
-    isModalOpen,
     setIsModalOpen,
+    showHeader,
 }) {
-    const openModal = () => setIsModalOpen(true);
+    const openModal = () => (setIsModalOpen ? setIsModalOpen(true) : console.log());
 
     return (
         <Row style={{ justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid #DFDFDF' }}>
@@ -30,13 +29,16 @@ function MainContentHeader({
             >
                 <div style={{ height: '100%' }}>{titleLeft}</div>
             </Col>
-            {headerRight && (
-                <Col className="content-header">
-                    <Row>
+
+            <Col className="content-header">
+                <Row style={{ alignItems: 'center', height: '100%' }}>
+                    {showHeader?.search && (
                         <div className="content-header_item">
                             <InputSearch value={inputValue} searchChange={searchChange} />
                         </div>
+                    )}
 
+                    {showHeader?.filter && (
                         <div className="content-header_item">
                             <ButtonFilter
                                 checkedKeys={checkedKeys}
@@ -44,15 +46,17 @@ function MainContentHeader({
                                 treeData={treeData}
                             />
                         </div>
+                    )}
+                    {showHeader?.addNew && (
                         <div className="content-header_item" style={{ display: 'flex' }}>
                             <PlusCircleOutlined
                                 onClick={openModal}
                                 style={{ fontSize: 16, opacity: 0.5, cursor: 'pointer' }}
                             />
                         </div>
-                    </Row>
-                </Col>
-            )}
+                    )}
+                </Row>
+            </Col>
         </Row>
     );
 }

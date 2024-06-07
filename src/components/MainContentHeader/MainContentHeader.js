@@ -15,7 +15,7 @@ function MainContentHeader({
     setIsModalOpen,
     showHeader,
 }) {
-    const openModal = () => (setIsModalOpen ? setIsModalOpen(true) : console.log());
+    const openModal = () => setIsModalOpen && setIsModalOpen(true);
 
     return (
         <Row style={{ justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid #DFDFDF' }}>

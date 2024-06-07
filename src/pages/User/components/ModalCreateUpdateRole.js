@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Row, Col, Select, message, Input, List, Collapse } from 'antd';
+import { Modal, Form, Row, Col, Select, message, Input, Collapse } from 'antd';
 import { getModulePermissionDisplay } from '../../../services/apis/RoleApis';
+import { createRole, updateRole } from '../../../services/apis/RoleApis';
 
 const layout = {
     labelCol: {
@@ -10,41 +11,50 @@ const layout = {
         span: 24,
     },
 };
-const { Option } = Select;
-
 function ModalCreateUpdateRole({ role, setRole, isOpenModal, setIsOpenModal, isReload, setIsReload }) {
     const [modulePermissions, setModulePermissions] = useState([]);
-    const [moduleLinkedPermissions, setModuleLinkedPermissions] = useState([{}]);
+    const [moduleLinkedPermissions, setModuleLinkedPermissions] = useState(
+        role?.roleModules?.map((m) => ({
+            moduleId: m?.moduleId,
+            linkedPermissions: m?.linkedPermissions?.map((p) => p?.permissionId),
+        })),
+    );
     const [form] = Form.useForm();
     const onOk = async () => {
         const formValues = await form.validateFields();
-        console.log(formValues);
+        const formRequest = { ...formValues, roleModules: moduleLinkedPermissions, id: role?.id };
+        await createUpdateRole(formRequest);
     };
     const onCancel = () => {
         setIsOpenModal && setIsOpenModal(false);
         setRole && setRole(null);
     };
 
-    const handleChangePermission = (e, moduleId) => {
-        // const newData =
-        //     moduleLinkedPermissions?.length > 0
-        //         ? moduleLinkedPermissions?.map((i) =>
-        //               i?.moduleId !== moduleId
-        //                   ? { moduleId: moduleId, linkedPermissions: e }
-        //                   : { ...i, linkedPermissions: e },
-        //           )
-        //         : moduleLinkedPermissions.push({ moduleId: moduleId, linkedPermissions: e });
-        // console.log(newData);
-        // setModuleLinkedPermissions(newData);
+    const createUpdateRole = async (formData) => {
+        try {
+            const res = formData?.id ? await updateRole(formData) : await createRole(formData);
+            message.success(res.message);
+            if (role) setRole(null);
+            setIsReload(!isReload);
+            setIsOpenModal(false);
+        } catch (error) {
+            message.error(error.message);
+        }
+    };
 
-        setModuleLinkedPermissions((pre) => {
-            return pre?.length > 0
-                ? pre?.map((i) =>
-                      i?.moduleId !== moduleId
-                          ? { moduleId: moduleId, linkedPermissions: e }
-                          : { ...i, linkedPermissions: e },
-                  )
-                : pre.push({ moduleId: moduleId, linkedPermissions: e });
+    const handleChangePermission = (e, moduleId) => {
+        setModuleLinkedPermissions((prev) => {
+            if (!prev?.length) return [{ moduleId, linkedPermissions: e }];
+            const existingModuleIndex = prev?.findIndex((p) => p?.moduleId === moduleId);
+            if (prev?.some((p) => p?.moduleId === moduleId)) {
+                return prev
+                    ?.map((module, index) =>
+                        index === existingModuleIndex ? { ...module, linkedPermissions: e } : module,
+                    )
+                    ?.filter((p) => p?.linkedPermissions?.length > 0);
+            } else {
+                return [...prev, { moduleId, linkedPermissions: e }]?.filter((p) => p?.linkedPermissions?.length > 0);
+            }
         });
     };
     useEffect(() => {
@@ -58,8 +68,6 @@ function ModalCreateUpdateRole({ role, setRole, isOpenModal, setIsOpenModal, isR
         };
         getModulePermissionData();
     }, []);
-
-    console.log(moduleLinkedPermissions);
 
     return (
         <Modal
@@ -113,6 +121,9 @@ function ModalCreateUpdateRole({ role, setRole, isOpenModal, setIsOpenModal, isR
                     <Col span={24}>
                         <Form.Item label="Permission">
                             {modulePermissions?.map((item) => {
+                                const selectedDefault = role?.roleModules
+                                    ?.find((m) => m?.moduleId === item.moduleId)
+                                    ?.linkedPermissions?.map((p) => p?.permissionId);
                                 const items = [
                                     {
                                         key: item.moduleId,
@@ -127,8 +138,9 @@ function ModalCreateUpdateRole({ role, setRole, isOpenModal, setIsOpenModal, isR
                                                     label: p.name,
                                                     value: p.permissionId,
                                                 }))}
+                                                defaultValue={selectedDefault}
                                                 onChange={(e) => handleChangePermission(e, item.moduleId)}
-                                            ></Select>
+                                            />
                                         ),
                                     },
                                 ];
@@ -139,12 +151,11 @@ function ModalCreateUpdateRole({ role, setRole, isOpenModal, setIsOpenModal, isR
                                         style={{ marginBottom: 10 }}
                                         size="small"
                                         items={items}
-                                    ></Collapse>
+                                    />
                                 );
                             })}
                         </Form.Item>
                     </Col>
-                    <Col></Col>
                 </Row>
             </Form>
         </Modal>

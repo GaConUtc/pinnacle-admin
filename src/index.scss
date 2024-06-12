@@ -91,6 +91,9 @@ input {
 .ant-table-wrapper {
     width: 100%;
     margin-top: 10px;
+    .ant-table{
+        scrollbar-color: rgba(0, 0, 0, 0.12) !important;
+    }
 }
 
 .ant-table-container {

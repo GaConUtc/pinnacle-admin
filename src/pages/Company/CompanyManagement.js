@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Table, Card, message } from 'antd';
+
 import { ArrowRightOutlined } from '@ant-design/icons';
 
-import MainContentHeader from '../../../components/MainContentHeader/MainContentHeader';
-import { getCompanies } from '../../../services/apis/CompanyApis';
+import MainContentHeader from '../../components/MainContentHeader/MainContentHeader';
+import { getCompanies } from '../../services/apis/CompanyApis';
 
 const showHeader = {
     search: true,
@@ -11,10 +13,11 @@ const showHeader = {
     addNew: true,
 };
 
-function CompanyRegister({ changeMode }) {
+function CompanyManagement() {
     const [companies, setCompanies] = useState([]);
+    const navigate = useNavigate();
     const editCompany = (company) => {
-        changeMode(true);
+        navigate(`/company/${company.id}`);
     };
     const columns = [
         {
@@ -67,12 +70,12 @@ function CompanyRegister({ changeMode }) {
             width: '7%',
             render: (data) => {
                 return (
-                    <>
-                        <ArrowRightOutlined
-                            style={{ marginRight: 10, cursor: 'pointer' }}
-                            onClick={() => editCompany(data)}
-                        />
-                    </>
+                    // <NavLink to={`/company/${data.id}`} replace="false">
+                    <ArrowRightOutlined
+                        style={{ marginRight: 10, cursor: 'pointer' }}
+                        onClick={() => editCompany(data)}
+                    />
+                    // </NavLink>
                 );
             },
         },
@@ -117,4 +120,4 @@ function CompanyRegister({ changeMode }) {
     );
 }
 
-export default CompanyRegister;
+export default CompanyManagement;

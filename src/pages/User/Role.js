@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Table, Card, message } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 
@@ -37,16 +37,8 @@ function Role() {
     }, []);
 
     useEffect(() => {
-        const getRoleData = async () => {
-            try {
-                const response = await getRoles();
-                setRoles(response.data);
-            } catch (error) {
-                message.error(error?.message);
-            }
-        };
-        getRoleData();
-    }, [isReload]);
+        fetchRoles();
+    }, [isReload, fetchRoles]);
 
     const columns = [
         {

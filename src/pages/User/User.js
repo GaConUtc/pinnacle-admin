@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Layout, Table, List, message } from 'antd';
+import { Table, List, Card, message } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import useDebounce from '../../components/commons/useDebounce';
 import PaginationCustom from '../../components/commons/PaginationCustom';
@@ -9,8 +9,6 @@ import CreateUpdateUserModal from './components/CreateUpdateUserModal';
 import { getUsers, deleteUser } from '../../services/apis/UserApis';
 import { COMMON_STATUS, SORT_TYPE } from '../../constants/common';
 import ModalConfirm from '../../components/ModalConfirm/ModalConfirm';
-
-const { Content } = Layout;
 
 const filterStatusData = Object.values(COMMON_STATUS)?.map((item) => ({ title: item.value, key: item.key }));
 const showHeader = {
@@ -53,9 +51,9 @@ function User() {
             const rs = await deleteUser({
                 id: idDelete,
             });
-            message.success(rs.message);
+            message.success(rs?.message);
         } catch (error) {
-            message.error(error.message);
+            message.error(error?.message);
         } finally {
             setOpenDelete(false);
             setIsReload(true);
@@ -63,6 +61,16 @@ function User() {
     };
 
     const columns = [
+        {
+            title: '',
+            dataIndex: 'index',
+            sortTitle: 'Index',
+            align: 'center',
+            width: '5%',
+            render: (_, __, index) => {
+                return index + 1;
+            },
+        },
         {
             title: 'First Name',
             dataIndex: 'firstName',
@@ -179,7 +187,7 @@ function User() {
                 setPageSize(userData?.data?.pageSize);
                 setTotal(userData?.data?.total);
             } catch (error) {
-                message.error(error.message);
+                message.error(error?.message);
             }
         },
         [page, pageSize, debouncedSearchStr, filterStatus],
@@ -189,8 +197,8 @@ function User() {
     }, [page, pageSize, debouncedSearchStr, filterStatus, isReload, getUserData]);
 
     return (
-        <>
-            <Content>
+        <Card
+            title={
                 <MainContentHeader
                     titleLeft="Admin User Management"
                     checkedKeys={filterStatus}
@@ -202,17 +210,19 @@ function User() {
                     setIsModalOpen={setIsModalOpen}
                     showHeader={showHeader}
                 />
-                <div className="content-table" style={{ backgroundColor: '#fff' }}>
-                    <Table
-                        columns={columns}
-                        showSorterTooltip={false}
-                        dataSource={users}
-                        pagination={false}
-                        onChange={getUserData}
-                        loading={false}
-                    />
-                    <>
-                        {total > 0 && (
+            }
+        >
+            <div className="content-table" style={{ backgroundColor: '#fff' }}>
+                <Table
+                    columns={columns}
+                    showSorterTooltip={false}
+                    dataSource={users}
+                    pagination={false}
+                    onChange={getUserData}
+                    loading={false}
+                    scroll={{ y: 490 }}
+                    footer={() =>
+                        total > 0 && (
                             <PaginationCustom
                                 total={total}
                                 page={page}
@@ -223,33 +233,29 @@ function User() {
                                 }}
                                 onShowSizeChange={(_, pageSize) => setPageSize(pageSize)}
                             />
-                        )}
-                    </>
-                </div>
-            </Content>
-            <>
-                {isModalOpen && (
-                    <CreateUpdateUserModal
-                        isModalOpen={isModalOpen}
-                        setIsModalOpen={setIsModalOpen}
-                        isReload={isReload}
-                        setIsReload={setIsReload}
-                        editUser={editUser}
-                        setEditUser={setEditUser}
-                    />
-                )}
-            </>
-            <>
-                {openDelete && (
-                    <ModalConfirm
-                        message="Are you sure you want to delete this account?"
-                        isOpen={openDelete}
-                        setIsOpen={setOpenDelete}
-                        onConfirm={confirmDeleteUser}
-                    />
-                )}
-            </>
-        </>
+                        )
+                    }
+                />
+            </div>
+            {isModalOpen && (
+                <CreateUpdateUserModal
+                    isModalOpen={isModalOpen}
+                    setIsModalOpen={setIsModalOpen}
+                    isReload={isReload}
+                    setIsReload={setIsReload}
+                    editUser={editUser}
+                    setEditUser={setEditUser}
+                />
+            )}
+            {openDelete && (
+                <ModalConfirm
+                    message="Are you sure you want to delete this account?"
+                    isOpen={openDelete}
+                    setIsOpen={setOpenDelete}
+                    onConfirm={confirmDeleteUser}
+                />
+            )}
+        </Card>
     );
 }
 

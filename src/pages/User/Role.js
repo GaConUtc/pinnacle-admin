@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Table, List, message } from 'antd';
+import { Table, Card, message } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 
 import { getRoles } from '../../services/apis/RoleApis';
 import ModalCreateUpdateRole from './components/ModalCreateUpdateRole';
 import MainContentHeader from '../../components/MainContentHeader/MainContentHeader';
 
-const { Content } = Layout;
 const showHeader = {
     search: false,
     filter: false,
@@ -28,7 +27,7 @@ function Role() {
                 const response = await getRoles();
                 setRoles(response.data);
             } catch (error) {
-                message.error(error.message);
+                message.error(error?.message);
             }
         };
         getRoleData();
@@ -63,8 +62,8 @@ function Role() {
     ];
 
     return (
-        <>
-            <Content>
+        <Card
+            title={
                 <MainContentHeader
                     titleLeft="Role"
                     showHeader={showHeader}
@@ -73,27 +72,29 @@ function Role() {
                     isReload={isReload}
                     setIsReload={setIsReload}
                 />
-                <div className="content-table" style={{ backgroundColor: '#fff' }}>
-                    <Table
-                        width={'100%'}
-                        columns={columns}
-                        showSorterTooltip={false}
-                        dataSource={roles}
-                        pagination={false}
-                        loading={false}
-                        rowKey={(record) => record?.id}
-                    />
-                </div>
-                {isOpenModal && (
-                    <ModalCreateUpdateRole
-                        role={role}
-                        setRole={setRole}
-                        isOpenModal={isOpenModal}
-                        setIsOpenModal={setIsModalOpen}
-                    />
-                )}
-            </Content>
-        </>
+            }
+        >
+            <div className="content-table" style={{ backgroundColor: '#fff' }}>
+                <Table
+                    width={'100%'}
+                    columns={columns}
+                    showSorterTooltip={false}
+                    dataSource={roles}
+                    pagination={false}
+                    loading={false}
+                    scroll={{ y: 520 }}
+                    rowKey={(record) => record?.id}
+                />
+            </div>
+            {isOpenModal && (
+                <ModalCreateUpdateRole
+                    role={role}
+                    setRole={setRole}
+                    isOpenModal={isOpenModal}
+                    setIsOpenModal={setIsModalOpen}
+                />
+            )}
+        </Card>
     );
 }
 

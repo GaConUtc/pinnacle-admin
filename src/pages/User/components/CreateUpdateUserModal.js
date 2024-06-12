@@ -31,12 +31,12 @@ function CreateUpdateUserModal({ isModalOpen, setIsModalOpen, isReload, setIsRel
     const createUser = async (user) => {
         try {
             const response = await createUpdateUser(user);
-            message.success(response.message);
+            message.success(response?.message);
             setIsModalOpen(false);
             setIsReload(!isReload);
             setEditUser(null);
         } catch (error) {
-            message.error(error.message);
+            message.error(error?.message);
         }
     };
     useEffect(() => {

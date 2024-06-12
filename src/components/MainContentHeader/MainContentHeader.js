@@ -5,6 +5,8 @@ import { PlusCircleOutlined } from '@ant-design/icons';
 import InputSearch from '../commons/InputSearch';
 import ButtonFilter from '../commons/ButtonFilter';
 
+import './MainContentHeader.scss';
+
 function MainContentHeader({
     titleLeft,
     checkedKeys,
@@ -18,8 +20,9 @@ function MainContentHeader({
     const openModal = () => (setIsModalOpen ? setIsModalOpen(true) : console.log());
 
     return (
-        <Row style={{ justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid #DFDFDF' }}>
+        <Row className="content-header" style={{ justifyContent: 'space-between', padding: '20px 0' }}>
             <Col
+                className="content-header__item content-header__left"
                 style={{
                     fontSize: 16,
                     fontWeight: 700,
@@ -30,16 +33,19 @@ function MainContentHeader({
                 <div style={{ height: '100%' }}>{titleLeft}</div>
             </Col>
 
-            <Col className="content-header">
-                <Row style={{ alignItems: 'center', height: '100%' }}>
+            <Col>
+                <Row
+                    className="content-header__item content-header__right"
+                    style={{ alignItems: 'center', height: '100%' }}
+                >
                     {showHeader?.search && (
-                        <div className="content-header_item">
+                        <div className="content-header__right-item">
                             <InputSearch value={inputValue} searchChange={searchChange} />
                         </div>
                     )}
 
                     {showHeader?.filter && (
-                        <div className="content-header_item">
+                        <div className="content-header__right-item">
                             <ButtonFilter
                                 checkedKeys={checkedKeys}
                                 setCheckedKeys={setCheckedKeys}
@@ -48,7 +54,7 @@ function MainContentHeader({
                         </div>
                     )}
                     {showHeader?.addNew && (
-                        <div className="content-header_item" style={{ display: 'flex' }}>
+                        <div className="content-header__right-item" style={{ display: 'flex' }}>
                             <PlusCircleOutlined
                                 onClick={openModal}
                                 style={{ fontSize: 16, opacity: 0.5, cursor: 'pointer' }}

@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Layout, Table, List, message } from 'antd';
+import { Table, List, Card, message } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import MainContentHeader from '../../components/MainContentHeader/MainContentHeader';
 import { getPermissions } from '../../services/apis/UserApis';
 import ModalUpdatePermission from './components/ModalUpdatePermission';
 
-const { Content } = Layout;
 const showHeader = {
     search: false,
     filter: false,
@@ -93,7 +92,7 @@ function Permission() {
             const response = await getPermissions();
             setPermissions(response.data);
         } catch (error) {
-            message.error(error.message);
+            message.error(error?.message);
         }
     }, []);
 
@@ -102,21 +101,18 @@ function Permission() {
     }, [isReload, getPermissionData]);
 
     return (
-        <>
-            <Content>
-                <MainContentHeader titleLeft="Permission" showHeader={showHeader} />
-                <div className="content-table" style={{ backgroundColor: '#fff' }}>
-                    <Table
-                        width={'100%'}
-                        columns={columns}
-                        showSorterTooltip={false}
-                        dataSource={permissions}
-                        pagination={false}
-                        loading={false}
-                        rowKey={(record) => record?.id}
-                    />
-                </div>
-            </Content>
+        <Card title={<MainContentHeader titleLeft="Permission" showHeader={showHeader} />}>
+            <div className="content-table" style={{ backgroundColor: '#fff' }}>
+                <Table
+                    width={'100%'}
+                    columns={columns}
+                    showSorterTooltip={false}
+                    dataSource={permissions}
+                    pagination={false}
+                    loading={false}
+                    rowKey={(record) => record?.id}
+                />
+            </div>
             {isOpenEdit && (
                 <ModalUpdatePermission
                     isOpenEdit={isOpenEdit}
@@ -127,7 +123,7 @@ function Permission() {
                     setIsReload={setIsReload}
                 />
             )}
-        </>
+        </Card>
     );
 }
 

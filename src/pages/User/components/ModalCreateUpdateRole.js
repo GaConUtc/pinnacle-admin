@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Row, Col, Select, message, Input, List, Collapse } from 'antd';
+import { Modal, Form, Row, Col, Select, message, Input, Collapse } from 'antd';
 import { getModulePermissionDisplay } from '../../../services/apis/RoleApis';
 
 const layout = {
@@ -10,7 +10,6 @@ const layout = {
         span: 24,
     },
 };
-const { Option } = Select;
 
 function ModalCreateUpdateRole({ role, setRole, isOpenModal, setIsOpenModal, isReload, setIsReload }) {
     const [modulePermissions, setModulePermissions] = useState([]);
@@ -26,17 +25,6 @@ function ModalCreateUpdateRole({ role, setRole, isOpenModal, setIsOpenModal, isR
     };
 
     const handleChangePermission = (e, moduleId) => {
-        // const newData =
-        //     moduleLinkedPermissions?.length > 0
-        //         ? moduleLinkedPermissions?.map((i) =>
-        //               i?.moduleId !== moduleId
-        //                   ? { moduleId: moduleId, linkedPermissions: e }
-        //                   : { ...i, linkedPermissions: e },
-        //           )
-        //         : moduleLinkedPermissions.push({ moduleId: moduleId, linkedPermissions: e });
-        // console.log(newData);
-        // setModuleLinkedPermissions(newData);
-
         setModuleLinkedPermissions((pre) => {
             return pre?.length > 0
                 ? pre?.map((i) =>
@@ -53,7 +41,7 @@ function ModalCreateUpdateRole({ role, setRole, isOpenModal, setIsOpenModal, isR
                 const response = await getModulePermissionDisplay();
                 setModulePermissions(response.data);
             } catch (error) {
-                message.error(error.message);
+                message.error(error?.message);
             }
         };
         getModulePermissionData();

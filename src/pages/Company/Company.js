@@ -1,7 +1,10 @@
-import React from 'react';
+import { useState } from 'react';
+import CompanyDetail from './components/CompanyDetail';
+import CompanyRegister from './components/CompanyRegister';
 
 function Company() {
-    return <div>Company</div>;
+    const [isEditMode, setIsEditMode] = useState(false);
+    return isEditMode ? <CompanyDetail /> : <CompanyRegister changeMode={setIsEditMode} />;
 }
 
 export default Company;

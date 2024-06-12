@@ -9,13 +9,15 @@ import './MainMenu.scss';
 
 const MainMenu = () => {
     return (
-        <Layout style={{ height: '100vh' }}>
+        <Layout style={{ height: '100vh', width: '100%' }}>
             <MainHeader />
             <Layout>
                 <MainSider />
                 <Layout
+                    className="content-layout"
                     style={{
-                        padding: 24,
+                        height: 'calc(100vh-75px)',
+                        padding: 22,
                     }}
                 >
                     <Outlet />

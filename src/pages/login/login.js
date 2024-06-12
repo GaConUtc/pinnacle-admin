@@ -21,7 +21,7 @@ function Login() {
             localStorage.setItem(ACCESS_TOKEN, response?.data?.token);
             navigate('/');
         } catch (error) {
-            message.error(error.message);
+            message.error(error?.message);
         }
     };
     return (

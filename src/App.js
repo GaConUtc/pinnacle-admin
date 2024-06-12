@@ -20,7 +20,12 @@ function App() {
                 >
                     <Route path="/" element={<Navigate to="/users" />} />
                     {SiderItems?.map((item) => (
-                        <Route key={item.key} path={item?.linkTo} element={item?.element}></Route>
+                        <Route
+                            key={item.key}
+                            path={item?.linkTo}
+                            element={item?.element}
+                            children={item?.children}
+                        ></Route>
                     ))}
                 </Route>
                 <Route path="*" element={<Navigate to="/login" />} />
